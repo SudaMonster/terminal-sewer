@@ -1,10 +1,10 @@
 # AVIT ZSH Theme
 
 #local ret_status="%(?:%{$fg_bold[green]%}﷽           :%{$fg_bold[red]%}﷽           )"
-local ret_status="%(?:%{$fg_bold[green]%}$USER @ $HOSTNAME:%{$fg_bold[red]%}$USER @ $HOSTNAME)"
+local ret_status="%(?:%{$fg_bold[green]%}[$USER @ $HOSTNAME]:%{$fg_bold[red]%}[$USER @ $HOSTNAME])"
 
 PROMPT='$(_current_dir) $(git_prompt_info) $(_ruby_version)
-${ret_status}'
+${ret_status}%{$reset_color%} '
 
 #PROMPT2='%{$fg[$CARETCOLOR]%}◀%{$reset_color%} '
 
