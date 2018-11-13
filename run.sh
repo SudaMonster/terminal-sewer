@@ -1,3 +1,8 @@
+
+# zsh
+mv ./zsh/theme/xma.zsh-theme ~/.oh-my-zsh/custom/themes
+sed -i -e 's/ZSH_THEME=".*"/ZSH_THEME="xma"' ~/.zshrc
+
 # Vim
 if [ -e ~/.vimrc ]
 then
@@ -26,5 +31,6 @@ git clone https://github.com/tomasr/molokai.git
 ln -s colors/molokai.vim .
 
 # tmux
+
 
 
