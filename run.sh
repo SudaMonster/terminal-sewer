@@ -1,7 +1,5 @@
 #/bin/bash
 set -e
-
-
 section()
 {
     echo [$@]
@@ -9,7 +7,8 @@ section()
 base=$(dirname "$0")
 
 section backup
-old_config="~/old_config"
+old_config=~/old_config
+echo $old_config
 mkdir -p ${old_config}
 
 
@@ -31,22 +30,26 @@ then
   mv ~/.oh-my-zsh/custom/themes/xma.zsh-theme ~/.oh-my-zsh/custom/themes/xma-old.zsh-theme
 fi
 cp ./zsh/theme/xma.zsh-theme ~/.oh-my-zsh/custom/themes
+cp $base/zsh/.zshrc ~
 sed -i -e 's/ZSH_THEME=".*"/ZSH_THEME="xma"/g' ~/.zshrc
+
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions || true
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting || true
 
 # Vim
 section vim
 if [ -e ~/.vimrc ]
 then
   echo Find an existing .vimrc file, mv to ${old_config}/.vimrc
-  mv ~/.vimrc ${old_config}.vimrc
+  mv ~/.vimrc ${old_config}/.vimrc
 fi
 cp ${base}/vim/.vimrc ~
 
 if [ -e ~/.vim ]
 then
     echo Find an existing .vim directory, mv to .vim.old
-    rm -rf ${old_config}.vim
-    mv ~/.vim ${old_config}.vim
+    rm -rf ${old_config}/.vim
+    mv ~/.vim ${old_config}/.vim
 fi
 
 mkdir -p ~/.vim
@@ -63,7 +66,6 @@ vim -c "PlugInstall | qa"
 
 section Finish
 echo Everything look nice now, enjoy!
-# tmux
 
 
 
