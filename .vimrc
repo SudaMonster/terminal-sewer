@@ -15,10 +15,19 @@ map <C-n> :NERDTreeToggle<CR>
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
 Plug 'yuttie/comfortable-motion.vim'
-"noremap <silent> <ScrollWheelDown> :call comfortable_motion#flick(8)<CR>
-"noremap <silent> <ScrollWheelUp>   :call comfortable_motion#flick(-8)<CR>
+noremap <silent> <ScrollWheelDown> :call comfortable_motion#flick(9)<CR>
+noremap <silent> <ScrollWheelUp>   :call comfortable_motion#flick(-9)<CR>
 
-Plug 'maralla/completor.vim'
+"Plug 'maralla/completor.vim'
+"let g:completor_auto_close_doc=0
+"autocmd FileType python setlocal completeopt+=preview
+"inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+"inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+"inoremap <expr> <cr> pumvisible() ? "\<C-y>\<cr>" : "\<cr>"
+"let g:completor_auto_trigger = 1
+"let g:completor_complete_options = 'menuone,noselect'
+
+Plug 'ervandew/supertab'
 
 Plug 'w0rp/ale'
 set statusline+=%#warningmsg#
@@ -35,13 +44,21 @@ Plug 'junegunn/fzf.vim'
 
 Plug 'tmhedberg/SimpylFold'
 
+Plug 'Vimjas/vim-python-pep8-indent'
+Plug 'luochen1990/rainbow'
+let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowToggle
+
+Plug 'jiangmiao/auto-pairs'
+let g:rainbow_conf = {
+\ 'ctermfgs': ['white','lightblue', 'lightgreen', 'lightyellow', 'lightred'],
+\}
+
+Plug 'xutaima/vim-ducttape'
+
 call plug#end()
 
 " ============== Theme =============================
 colorscheme molokai
-syntax on
-filetype plugin on
-filetype indent on
 set t_Co=256
 set t_ut=
 set number
@@ -52,7 +69,7 @@ set mouse=a
 set nowrap
 set encoding=utf-8
 set fileencoding=utf-8
-set linebreak    "Wrap lines at convenient points
+"set linebreak    "Wrap lines at convenient points
 "
 " ================ Turn Off Swap Files ==============
 set noswapfile
@@ -61,19 +78,14 @@ set nowb
 
 " ================ Indentation ======================
 " configure expanding of tabs for various file types
-au BufRead,BufNewFile *.py set expandtab
-au BufRead,BufNewFile *.c set noexpandtab
-au BufRead,BufNewFile *.h set noexpandtab
-au BufRead,BufNewFile Makefile* set noexpandtab
 set expandtab           " enter spaces when tab is pressed
-"set textwidth=120       " break lines when line length increases
 set tabstop=4           " use 4 spaces to represent tab
 "set softtabstop=4
 set autoindent          " copy indent from current line when starting a new line
-set shiftwidth=4        " number of spaces to use for auto indent
+"set shiftwidth=4        " number of spaces to use for auto indent
 set backspace=indent,eol,start " make backspaces more powerfull
-set ruler                           " show line and column number
-set showcmd             " show (partial) command in status line
+"set ruler                           " show line and column number
+"set showcmd             " show (partial) command in status line
 set smartindent
 
 " ================ Key Bundings ======================
@@ -84,9 +96,10 @@ nnoremap '' :q<CR>
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
+
 nnoremap <C-H> <C-W><C-H>
 
-auto BufRead,BufNewFile *.tape setf filetype=ducttape
+"auto BufRead,BufNewFile *.tape setf filetype=ducttape
 
 let c='a'
 while c <= 'z'
@@ -101,3 +114,24 @@ nnoremap <C-p> :FZF<CR>
 nmap <c-h> :TagbarToggle<CR>
 nnoremap <C-a> :Buffers<CR>
 nnoremap <Leader>s :%s/\<<C-r><C-w>\>/
+let repo_path = system('hg root')
+let repo_initial = 'f'
+if repo_path =~# 'configerator'
+    let repo_initial = 'c'
+elseif repo_path =~# 'www'
+    let repo_initial = 't'
+elseif repo_path =~# 'fbcode'
+    let repo_initial = 'f'
+endif
+
+command! -bang -nargs=* Bg
+  \ call fzf#vim#grep(
+  \   repo_initial . 'bgs --color=on '.shellescape(<q-args>) .
+  \ '| sed "s,^[^/]*/,,"' .
+  \ '| sed "s#^#$(hg root)/#g"', 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('up:55%:hidden', '?'),
+  \   <bang>0)
+noremap gs :Bg <C-r><C-w><CR>
+
+filetype plugin indent on
