@@ -1,8 +1,13 @@
 set -e
 base=$(dirname "$0")
 #fzf
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-~/.fzf/install
+if [ -e ~/.fzf ]
+then
+    echo fzf is already installed
+else
+   git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+   ~/.fzf/install
+fi
 # zsh
 if [ -e ~/.oh-my-zsh/custom/themes/xma.zsh-theme ]
 then
@@ -28,10 +33,12 @@ then
   mv ~/.vim ~/.vim.old
 fi
 
+
 mkdir -p .vim
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
+mkdir -p  ~/.vim/colors
 cd ~/.vim/colors
 git clone https://github.com/tomasr/molokai.git
 cp -s molokai/colors/molokai.vim .
