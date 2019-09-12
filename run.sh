@@ -1,5 +1,8 @@
 set -e
 base=$(dirname "$0")
+#fzf
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install
 # zsh
 if [ -e ~/.oh-my-zsh/custom/themes/xma.zsh-theme ]
 then
@@ -24,20 +27,11 @@ then
   rm -rf ~/.vim.old
   mv ~/.vim ~/.vim.old
 fi
+
 mkdir -p .vim
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-mkdir -p ~/.vim/autoload ~/.vim/bundle && \
-curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
-
-mkdir -p ~/.vim/bundle
-cd ~/.vim/bundle
-git clone https://github.com/yuttie/comfortable-motion.vim.git
-git clone https://github.com/maralla/completor.vim.git
-git clone https://github.com/scrooloose/nerdtree.git
-git clone https://github.com/vim-airline/vim-airline.git
-git clone https://github.com/vim-airline/vim-airline-themes.git
-git clone https://github.com/Vimjas/vim-python-pep8-indent.git
-mkdir -p ~/.vim/colors
 cd ~/.vim/colors
 git clone https://github.com/tomasr/molokai.git
 cp -s molokai/colors/molokai.vim .
